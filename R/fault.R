@@ -55,7 +55,7 @@ calib <- function(database, dif_per_1, dif_per_2, dif_per_3) {
 #' @param t3 lower boxplot threshold
 denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
 
-  df <- database[,-c(1,2)]
+  df <- database[,-c(1,2)] * -0.01
 
   int=nrow(df)
   pb <- progress::progress_bar$new(total = int)
