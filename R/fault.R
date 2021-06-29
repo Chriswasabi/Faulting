@@ -63,7 +63,7 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
   dl <- numeric()
   db <- numeric()
   f_database <- matrix(ncol=ncol(df), nrow=int)
-  x_fit <- seq(1:2044)
+  x_fit <- seq(1:2048)
   x2 <- x_fit^2
 
   for (j in 1:int) {
