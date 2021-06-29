@@ -14,6 +14,8 @@ calib <- function(database, dif_per_1, dif_per_2, dif_per_3) {
   q1 <- numeric()
   q3 <- numeric()
   iqr <- numeric()
+  x_fit <- seq(1:2044)
+  x2 <- x_fit^2
 
   for (j in 1:nrow(df)) {
 
@@ -145,10 +147,13 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
 
     ##Detrending##
     #This part of the code detrends the profiles
-    k <- pracma::detrend(x = k)
+    fit <- lm(k ~ x_fit + x2)
+    y_hat <- unname(fit$coefficients[[1]]) + unname(fit$coefficients[[2]])*x_fit + unname(fit$coefficients[[3]])*x2
+
+    k_d <- k - y_hat
 
     na_counter[j] <- counter
-    f_database[j,] <- k
+    f_database[j,] <- k_d
 
     pb$tick()
     Sys.sleep(1 / int)
