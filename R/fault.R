@@ -69,7 +69,9 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
   for (j in 1:int) {
 
     profile <- as.numeric(df[j,])
-    profile <- profile - median(profile)
+    fit1 <- lm(profile ~ x_fit)
+    y_hat1 <- unname(fit1$coefficients[[1]]) + unname(fit1$coefficients[[2]])*x_fit
+    profile <- profile - y_hat1
 
     #Difference with lag
     for (i in 3:(length(profile)-2)) {
@@ -104,7 +106,7 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
 
     #Spike + Flatline Detection
     for (i in 3:(length(profile)-2)) {
-      if ((db[i-2]>150 & dl[i-2]==0) | (db[i-2]< dt_1 & dl[i-2]==0) ) {
+      if ((db[i-2]>dt_2 & dl[i-2]==0) | (db[i-2]< dt_1 & dl[i-2]==0) ) {
         profile[i]=NA
       }
     }
@@ -135,7 +137,7 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
     #This is because if the endpoints are flatlines they will not be removed based on the for loop iteration limits
     for (i in 3:(length(profile)-2)) {
       if (is.na(profile[i] & is.na(profile[i+1]) & i==3) | (is.na(profile[i]) & is.na(profile[i-1]) & i==2046)) {
-        profile[i]= 0
+        profile[i]= median(x = profile, na.rm = T)
       }
     }
 
