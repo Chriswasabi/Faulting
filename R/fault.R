@@ -135,7 +135,7 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
     #This is because if the endpoints are flatlines they will not be removed based on the for loop iteration limits
     for (i in 3:(length(profile)-2)) {
       if (is.na(profile[i] & is.na(profile[i+1]) & i==3) | (is.na(profile[i]) & is.na(profile[i-1]) & i==2046)) {
-        profile[i]= median(x = profile, na.rm = T)
+        profile[i]= 0
       }
     }
 
@@ -170,5 +170,4 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
 #' @import "stats"
 #' @import "tidyverse"
 #' @import "imputeTS"
-#' @import "pracma"
 #' @import "progress"
