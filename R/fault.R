@@ -178,6 +178,7 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
   return(cf_database)
 }
 
+#' Detect joint
 #' @export
 #' @param database csv file with the profiles
 joint_detect <- function(database) {
@@ -290,6 +291,7 @@ joint_detect <- function(database) {
   f_database <- cbind(jc, df)
   return(f_database)
 }
+
 
 #' @import "stats"
 #' @import "tidyverse"

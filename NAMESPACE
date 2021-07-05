@@ -2,3 +2,4 @@
 
 export(calib)
 export(denoise)
+export(joint_detect)
