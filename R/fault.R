@@ -68,7 +68,7 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
 
   int=nrow(df)
   pb <- progress::progress_bar$new( format = "  Denoising Profiles [:bar] :percent eta: :eta",
-                                    total = tot, clear = FALSE, width= 140)
+                                    total = int, clear = FALSE, width= 140)
   na_counter <- numeric()
   dl <- numeric()
   db <- numeric()
