@@ -178,6 +178,118 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
   return(cf_database)
 }
 
+#' @export
+#' @param database csv file with the profiles
+joint_detect <- function(database) {
+
+  df=database
+  tot = nrow(df)
+  sample_size <- ncol(df)-1
+  jc <- numeric()
+
+  for (int in 1:tot) {
+
+    profile <- as.numeric(df[int,][-1])
+    profile[profile>-1] = -1
+
+
+    d <- numeric()
+    w <- numeric()
+    t <- numeric(); kk=1; k=1
+    tt <- numeric(); j=1
+
+
+    for (i in 1:(sample_size-1)) {
+      if((profile[i]<(-1) & profile[i+1]==(-1)) | (profile[i]==(-1) & profile[i+1]<(-1))) {
+        d[i] <- 1
+
+      } else {
+        d[i] <- 0
+      }
+
+    }
+    d[sample_size] <- 0
+
+    for (i in 1:sample_size) {
+      if(i==1) {
+
+        w[i] <- 0
+
+      } else { if ( d[i]==0  ) {
+
+        w[i] <- w[i-1] + 1
+
+      } else {
+
+        w[i] <- 0
+
+      }
+      }
+    }
+
+    for (i in 1:sample_size) {
+      if(i==1) {
+        next()
+
+      } else { if ( w[i]==0  ) {
+
+        t[k] <- kk
+        k=k+1
+        kk=1
+
+      } else { if (i==2044) {
+
+        t[k] <- kk + 1
+
+      } else {
+
+        kk = kk + 1
+
+      }
+      }
+      }
+    }
+
+    for (i in 1:sample_size) {
+      if(i==1) {
+
+        tt[i] = t[j]
+
+      } else { if ( w[i]==0  ) {
+
+        j=j+1
+        tt[i] <- t[j]
+
+      } else {
+
+        tt[i] <- t[j]
+      }
+      }
+    }
+
+    z <- as.data.frame(profile)
+    z$width = tt
+
+    z1 <- z %>% mutate(joint_test = ifelse(test = profile < -3 & width > 30, 1, 0))
+
+    z2 <- z1 %>% distinct(width, joint_test) %>% filter(joint_test==1)
+    jw = max(z2$width)
+
+    z3 <- z1 %>% mutate(joint = ifelse(test = profile < -3 & width == jw, 1, 0))
+
+    joint_center = ifelse(max(z3$joint)==1,
+                          (min(which(z3$joint %in% 1)) + max(which(z3$joint %in% 1)))/2,0)
+    joint  =ifelse(joint_center==0, 0, which(z1$joint %in% 1))
+
+
+    jc[int] = joint_center
+
+    print(100*int/tot)
+  }
+
+  f_database <- cbind(jc, df)
+  return(f_database)
+}
 
 #' @import "stats"
 #' @import "tidyverse"
