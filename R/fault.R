@@ -9,13 +9,16 @@ calib <- function(database, dif_per_1, dif_per_2, dif_per_3) {
 
   df <- database[,-c(1,2)] * -0.01
 
+  tot = nrow(df)
+  pb <- progress::progress_bar$new( format = "  Calibrating difference thresholds [:bar] :percent eta: :eta",
+                                    total = tot, clear = FALSE, width= 140)
   db <- numeric()
   dif <- matrix(ncol=(ncol(df)-4), nrow=nrow(df))
   q1 <- numeric()
   q3 <- numeric()
   iqr <- numeric()
 
-  for (j in 1:nrow(df)) {
+  for (j in 1:tot) {
 
     profile <- as.numeric(df[j,])
     profile <- profile - stats::median(profile)
@@ -24,16 +27,22 @@ calib <- function(database, dif_per_1, dif_per_2, dif_per_3) {
       db[i-2]=profile[i]-profile[i-1]
     }
     dif[j,] <- db
-    print(100*j/nrow(df))
+    pb$tick()
+    Sys.sleep(1/tot)
   }
 
-  for (j in 1:nrow(database)) {
+  pb <- progress::progress_bar$new( format = "  Calibrating boxplot thresholds [:bar] :percent eta: :eta",
+                                    total = tot, clear = FALSE, width= 140)
+
+  for (j in 1:tot) {
 
     profile <- as.numeric(df[j,])
     profile <- profile - stats::median(profile)
     q1[j] <- stats::quantile(x = profile, probs = 0.25)
     q3[j] <- stats::quantile(x = profile, probs = 0.75)
-    print(100*j/nrow(database))
+
+    pb$tick()
+    Sys.sleep(1/tot)
   }
 
   iq <- q3 - q1
@@ -58,7 +67,8 @@ denoise <- function(database, dt_1, dt_2, dt_3, t1, t3) {
   df <- database[,-c(1,2)] * -0.01
 
   int=nrow(df)
-  pb <- progress::progress_bar$new(total = int)
+  pb <- progress::progress_bar$new( format = "  Denoising Profiles [:bar] :percent eta: :eta",
+                                    total = tot, clear = FALSE, width= 140)
   na_counter <- numeric()
   dl <- numeric()
   db <- numeric()

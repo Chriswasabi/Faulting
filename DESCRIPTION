@@ -10,8 +10,7 @@ Imports:
     stats,
     tidyverse,
     progress,
-    imputeTS,
-    pracma
+    imputeTS
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
