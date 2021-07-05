@@ -38,8 +38,8 @@ calib <- function(database, dif_per_1, dif_per_2, dif_per_3) {
 
     profile <- as.numeric(df[j,])
     profile <- profile - stats::median(profile)
-    q1[j] <- stats::quantile(x = profile, probs = 0.25)
-    q3[j] <- stats::quantile(x = profile, probs = 0.75)
+    q1[j] <- stats::quantile(x = profile, probs = 0.10)
+    q3[j] <- stats::quantile(x = profile, probs = 0.90)
 
     pb$tick()
     Sys.sleep(1/tot)
