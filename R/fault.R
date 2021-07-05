@@ -38,16 +38,16 @@ calib <- function(database, dif_per_1, dif_per_2, dif_per_3) {
 
     profile <- as.numeric(df[j,])
     profile <- profile - stats::median(profile)
-    q1[j] <- stats::quantile(x = profile, probs = 0.06)
-    q3[j] <- stats::quantile(x = profile, probs = 0.94)
+    q1[j] <- stats::quantile(x = profile, probs = 0.05)
+    q3[j] <- stats::quantile(x = profile, probs = 0.95)
 
     pb$tick()
     Sys.sleep(1/tot)
   }
 
   iq <- q3 - q1
-  t1 <- mean(q1) - 3*mean(iq)
-  t3 <- mean(q3) + 3*mean(iq)
+  t1 <- mean(q1) - 3*stats::quantile(x = iq, probs = 0.65)
+  t3 <- mean(q3) + 3*stats::quantile(x = iq, probs = 0.65)
 
   a <- c(stats::quantile(dif, probs = c(dif_per_1, dif_per_2, dif_per_3)), t1, t3)
 
