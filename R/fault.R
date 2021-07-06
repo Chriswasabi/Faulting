@@ -283,7 +283,7 @@ joint_detect <- function(database) {
     joint  =ifelse(joint_center==0, 0, which(z1$joint %in% 1))
 
 
-    jc[int] = joint_center
+    jc[int] = joint
 
     print(100*int/tot)
   }
