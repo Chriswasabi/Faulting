@@ -274,7 +274,8 @@ joint_detect <- function(database) {
     z1 <- z %>% mutate(joint_test = ifelse(test = profile < -1.5 & width > 70, 1, 0))
 
     z2 <- z1 %>% filter(joint_test==1) %>%  group_by(width) %>% summarise(depth = mean(profile)) %>% ungroup()
-    jw = z2 %>% filter(width >70 & depth < -2) %>% select(width) %>% as.numeric()
+    z2.2 = z2 %>% filter(width >70 & depth < -2)
+    jw = z2.2$width
 
     z3 <- z1 %>% mutate(joint = ifelse(test = profile < -1.5 & width == jw, 1, 0))
 
