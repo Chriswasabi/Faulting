@@ -271,7 +271,7 @@ joint_detect <- function(database) {
     z <- as.data.frame(profile)
     z$width = tt
 
-    z1 <- z %>% mutate(joint_test = ifelse(test = profile < -1.5 & width > 80, 1, 0))
+    z1 <- z %>% mutate(joint_test = ifelse(test = profile < -1.5 & width > 70, 1, 0))
 
     z2 <- z1 %>% distinct(width, joint_test) %>% filter(joint_test==1)
     jw = max(z2$width)
