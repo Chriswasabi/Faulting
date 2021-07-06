@@ -47,7 +47,7 @@ calib <- function(database, dif_per_1, dif_per_2, dif_per_3) {
 
   iq <- q3 - q1
   t1 <- mean(q1) - 3*stats::quantile(x = iq, probs = 0.95)
-  t3 <- mean(q3) + 3*stats::quantile(x = iq, probs = 0.95)
+  t3 <- mean(q3) + 3*mean(iq)
 
   a <- c(stats::quantile(dif, probs = c(dif_per_1, dif_per_2, dif_per_3)), t1, t3)
 
