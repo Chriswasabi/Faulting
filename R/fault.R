@@ -273,10 +273,10 @@ joint_detect <- function(database) {
 
     z1 <- z %>% mutate(joint_test = ifelse(test = profile < -1.5 & width > 70, 1, 0))
 
-    z2 <- z1 %>% distinct(width, joint_test) %>% filter(joint_test==1)
-    jw = max(z2$width)
+    z2 <- z1 %>% filter(joint_test==1) %>%  group_by(width) %>% summarise(depth = mean(profile)) %>% ungroup()
+    jw = z2 %>% filter(width >70 & depth < -2) %>% select(width) %>% as.numeric()
 
-    z3 <- z1 %>% mutate(joint = ifelse(test = profile < -3 & width == jw, 1, 0))
+    z3 <- z1 %>% mutate(joint = ifelse(test = profile < -1.5 & width == jw, 1, 0))
 
     joint_center = ifelse(max(z3$joint)==1,
                           (min(which(z3$joint %in% 1)) + max(which(z3$joint %in% 1)))/2,0)
